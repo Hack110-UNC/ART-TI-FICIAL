@@ -6,6 +6,7 @@ import time
 import os
 import processing as imageProcessing
 import parsing
+from drawing import * 
 USEAPI=False
 
 SCREEN_WIDTH: int = 1000
@@ -42,7 +43,7 @@ def main():
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
     sec=roundTime
-
+    score = 0
     pos_list = []
     clock = pygame.time.Clock()
     running = True
@@ -51,8 +52,8 @@ def main():
     while running: 
         #Labels Display Setup
         label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-        label_text(f"Round: {round}", text_font, (0,0,0), 800, 10)
-        label_text(f"Timer: {sec}", text_font, (0,0,0), 400, 10)
+        label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
+        label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
 
         if drawing and not timerActive:
             startTime = time.time()
@@ -84,8 +85,7 @@ def main():
         clock.tick(TICK_RATE)
         endTime = time.time()
         elasped=endTime-startTime
-        topScreenRect=(0,0,SCREEN_WIDTH,40)
-        pygame.draw.rect(screen,"white",topScreenRect)
+        clearTopSection(screen)
         if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
@@ -99,12 +99,16 @@ def main():
                 AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                 AItext = parsing.getRawOutputText(AIresponse)
                 objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
+                clearTopSection(screen)
                 label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 400, 10)
+                score=score+AIscore
+                time.sleep(4)
                 imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
                 imageSent=True
         else:
-            sec=int(roundTime-elasped)
+            if elasped<30:
+                sec=int(roundTime-elasped)
 
 main()
