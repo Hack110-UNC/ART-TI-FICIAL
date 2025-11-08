@@ -9,17 +9,6 @@ TICK_RATE: int = 60
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 
-# class Boulder(pygame.sprite.Sprite):
-#     speed: int
-#     surf: pygame.Surface
-#     rect: pygame.Rect
-
-#     def __init__(self):
-#         super(Boulder, self).__init__()
-
-#         self.speed = random.randint(4, 12)
-#         self.surf = pygame.image.load("assets/boulder.png").convert()
-#         self.rect = self.surf.get_rect(bottomleft = (SCREEN_WIDTH, ))
 #TEMPORARAY
 targetWord='tree'
 def main():
@@ -76,4 +65,8 @@ def main():
                 AIresponse=imageProcessing.getResposeFromAI(base64String,targetWord)
                 print(AIresponse)
                 imageSent=True
+
+
+                
+
 main()
