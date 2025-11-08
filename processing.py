@@ -3,6 +3,11 @@ from PIL import Image
 import base64
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY=os.getenv("OPENAI_KEY")
+
 def imgData2Png(imageArray): #numpy image array
     matrix = np.array(imageArray).astype('uint8') * 255 #scale to RGB
     img = Image.fromarray(matrix, mode='L')
@@ -21,9 +26,8 @@ def filePath2AIPayload(filePath):
     return base64ImgString #send to AI
 
 def getResposeFromAI(imagePayload,targetWord):
-    #PLESAE DO NOT LEAVE THE API KEY HERE
     try:
-        client = OpenAI(api_key=['PLACEHOLDER'])
+        client = OpenAI(api_key=API_KEY)
     except Exception as e:
         quit()
         print('API error, please check key configuration')

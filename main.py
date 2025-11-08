@@ -4,7 +4,7 @@ import pygame_gui
 import random
 import time 
 import processing as imageProcessing
-
+USEAPI=True
 
 SCREEN_WIDTH: int = 1000
 SCREEN_HEIGHT: int = 600
@@ -71,25 +71,18 @@ def main():
             drawing=False
             timerActive=False
             surface_array = pygame.surfarray.pixels2d(surface=screen)
-            if not imageSent:
+            if (not imageSent) and USEAPI==True:
                 surface_array=surface_array/16777215 #b&w
                 path=imageProcessing.imgData2Png(surface_array)
                 base64String=imageProcessing.filePath2AIPayload(path)
                 AIresponse=imageProcessing.getResposeFromAI(base64String,targetWord)
                 print(AIresponse)
                 imageSent=True
+            elif USEAPI==False:
+                print("API use is disabled currently.")
+                imageSent=True
+
+
+                
 
 main()
-
-#----------------TEST STUFF----------------
-# class Boulder(pygame.sprite.Sprite):
-#     speed: int
-#     surf: pygame.Surface
-#     rect: pygame.Rect
-
-#     def __init__(self):
-#         super(Boulder, self).__init__()
-
-#         self.speed = random.randint(4, 12)
-#         self.surf = pygame.image.load("assets/boulder.png").convert()
-#         self.rect = self.surf.get_rect(bottomleft = (SCREEN_WIDTH, ))
