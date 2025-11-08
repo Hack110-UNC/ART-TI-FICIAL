@@ -9,8 +9,8 @@ import parsing
 from drawing import * 
 USEAPI=False
 
-SCREEN_WIDTH: int = 800
-SCREEN_HEIGHT: int = 450
+SCREEN_WIDTH: int = 1000
+SCREEN_HEIGHT: int = 600
 TICK_RATE: int = 60
 BLACK = (0,0,0)
 WHITE = (255,255,255)
