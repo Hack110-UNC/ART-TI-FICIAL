@@ -7,14 +7,33 @@ import os
 import processing as imageProcessing
 import parsing
 USEAPI=False
+USEAPI=False
 
-SCREEN_WIDTH: int = 500
-SCREEN_HEIGHT: int = 300
+SCREEN_WIDTH: int = 1000
+SCREEN_HEIGHT: int = 600
 TICK_RATE: int = 60
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 brushSize = 2
 score = 0
+round = 0
+sec = 0
+
+pygame.init()
+pygame.font.init()
+
+#Screen Display Setup
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen.fill(WHITE)
+
+#Converting Text to Label
+text_font = pygame.font.SysFont("verdana", 25, bold=True)
+def label_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x,y))
+
+
+targetWord='tree'
 nounsPath = os.path.join(os.getcwd(),"assets","nouns.csv") #to ensure it works on all operating systems
 drawingNouns=parsing.csvNounsToList(nounsPath)
 def main():
@@ -24,21 +43,18 @@ def main():
     finishEarly=False
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
-    pygame.init()
-    pygame.font.init()
-
-    #Screen Display
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    screen.fill(WHITE)
-
-    #GUI Display
-    #drawing period over
 
     pos_list = []
     clock = pygame.time.Clock()
     running = True
+
+
     while running: 
-        time_delta = clock.tick(TICK_RATE)/1000 #For GUI Manager: Tracks the time between each loop in program
+        #Labels Display Setup
+        label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
+        label_text(f"Round: {round}", text_font, (0,0,0), 400, 10)
+        label_text(f"Timer: {sec}", text_font, (0,0,0), 800, 10)
+
         if drawing and not timerActive:
             startTime = time.time()
             timerActive=True 
@@ -46,8 +62,6 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONUP:
-                pass
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
@@ -68,7 +82,7 @@ def main():
             elif pygame.mouse.get_pressed()[0] == False:
                 pos_list = []
         pygame.display.flip()
-        # clock.tick(TICK_RATE) Moved: Kept in case of broken function
+        clock.tick(TICK_RATE)
         endTime = time.time()
         if (endTime-startTime >= 30) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
