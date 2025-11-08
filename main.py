@@ -38,9 +38,10 @@ def main():
     timerActive=False
     imageSent=False
     finishEarly=False
+    roundTime=15
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
-    sec=30
+    sec=roundTime
 
     pos_list = []
     clock = pygame.time.Clock()
@@ -83,10 +84,9 @@ def main():
         clock.tick(TICK_RATE)
         endTime = time.time()
         elasped=endTime-startTime
-        sec=int(30-elasped)
         topScreenRect=(0,0,SCREEN_WIDTH,40)
         pygame.draw.rect(screen,"white",topScreenRect)
-        if (elasped >= 30) or (finishEarly and not imageSent): #30 sec draw time, period over
+        if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
             if (not imageSent) and USEAPI==True:
@@ -102,8 +102,7 @@ def main():
             elif USEAPI==False:
                 print("API use is disabled currently.")
                 imageSent=True
-
-
-                
+        else:
+            sec=int(roundTime-elasped)
 
 main()
