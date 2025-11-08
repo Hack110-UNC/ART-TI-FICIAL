@@ -89,6 +89,7 @@ def main():
         if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
+            time.sleep(2)
             if (not imageSent) and USEAPI==True:
                 surface_array = pygame.surfarray.pixels2d(surface=screen)
                 surface_array=surface_array/16777215 #b&w
@@ -98,8 +99,9 @@ def main():
                 AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                 AItext = parsing.getRawOutputText(AIresponse)
                 objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
+                label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 400, 10)
                 imageSent=True
-            elif USEAPI==False:
+            elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
                 imageSent=True
         else:
