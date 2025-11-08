@@ -8,8 +8,8 @@ import processing as imageProcessing
 import parsing
 USEAPI=False
 
-SCREEN_WIDTH: int = 1000
-SCREEN_HEIGHT: int = 600
+SCREEN_WIDTH: int = 800
+SCREEN_HEIGHT: int = 450
 TICK_RATE: int = 60
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -51,8 +51,8 @@ def main():
     while running: 
         #Labels Display Setup
         label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-        label_text(f"Round: {round}", text_font, (0,0,0), 800, 10)
-        label_text(f"Timer: {sec}", text_font, (0,0,0), 400, 10)
+        label_text(f"Round: {round}", text_font, (0,0,0), 650, 10)
+        label_text(f"Timer: {sec}", text_font, (0,0,0), 340, 10)
 
         if drawing and not timerActive:
             startTime = time.time()
@@ -64,6 +64,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    enable_eraser()
         if drawing:
             if pygame.mouse.get_pressed()[0]: 
                 mouse_pos = pygame.mouse.get_pos()
@@ -78,13 +81,14 @@ def main():
                                   color=BLACK, closed=True, 
                                   width=int(brushSize*2.5), 
                                   points=(second_last_pos, last_pos))
+                
             elif pygame.mouse.get_pressed()[0] == False:
                 pos_list = []
         pygame.display.flip()
         clock.tick(TICK_RATE)
         endTime = time.time()
         elasped=endTime-startTime
-        topScreenRect=(0,0,SCREEN_WIDTH,40)
+        topScreenRect=(0,0,SCREEN_WIDTH,45)
         pygame.draw.rect(screen,"white",topScreenRect)
         if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
