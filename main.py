@@ -1,4 +1,4 @@
-# import numpy as np
+import numpy
 import pygame
 import random
 
@@ -27,6 +27,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.fill(WHITE)
 
+    surface_array = pygame.surfarray.pixels2d(surface=screen)
+
     pos_list = []
 
     clock = pygame.time.Clock()
@@ -44,7 +46,7 @@ def main():
             last_pos = pos_list[len(pos_list)-1]
             print(last_pos)
             second_last_pos = pos_list[len(pos_list)-2]
-            pygame.draw.circle(surface=screen, color=BLACK, center=mouse_pos, radius=13)
+            pygame.draw.circle(surface=screen, color=BLACK, center=mouse_pos, radius=12)
             pygame.draw.lines(surface=screen, color=BLACK, closed=True, width=30, points=(second_last_pos, last_pos))
         elif pygame.mouse.get_pressed()[0] == False:
             pos_list = []
@@ -52,4 +54,5 @@ def main():
         pygame.display.flip()
         clock.tick(TICK_RATE)
    
+
 main()
