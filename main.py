@@ -7,7 +7,6 @@ import os
 import processing as imageProcessing
 import parsing
 USEAPI=False
-USEAPI=False
 
 SCREEN_WIDTH: int = 1000
 SCREEN_HEIGHT: int = 600
@@ -31,7 +30,6 @@ text_font = pygame.font.SysFont("verdana", 25, bold=True)
 def label_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
-
 nounsPath = os.path.join(os.getcwd(),"assets","nouns.csv") #to ensure it works on all operating systems
 drawingNouns=parsing.csvNounsToList(nounsPath)
 
@@ -42,7 +40,7 @@ def main():
     finishEarly=False
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
-    sec=0
+    sec=30
 
     pos_list = []
     clock = pygame.time.Clock()
@@ -52,8 +50,8 @@ def main():
     while running: 
         #Labels Display Setup
         label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-        label_text(f"Round: {round}", text_font, (0,0,0), 400, 10)
-        label_text(f"Timer: {sec}", text_font, (0,0,0), 800, 10)
+        label_text(f"Round: {round}", text_font, (0,0,0), 800, 10)
+        label_text(f"Timer: {sec}", text_font, (0,0,0), 400, 10)
 
         if drawing and not timerActive:
             startTime = time.time()
@@ -84,7 +82,11 @@ def main():
         pygame.display.flip()
         clock.tick(TICK_RATE)
         endTime = time.time()
-        if (endTime-startTime >= 30) or (finishEarly and not imageSent): #30 sec draw time, period over
+        elasped=endTime-startTime
+        sec=int(30-elasped)
+        topScreenRect=(0,0,SCREEN_WIDTH,40)
+        pygame.draw.rect(screen,"white",topScreenRect)
+        if (elasped >= 30) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
             if (not imageSent) and USEAPI==True:
