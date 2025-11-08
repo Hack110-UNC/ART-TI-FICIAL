@@ -25,7 +25,7 @@ def filePath2AIPayload(filePath):
     os.remove(filePath)
     return base64ImgString #send to AI
 
-def getResposeFromAI(imagePayload,targetWord):
+def getResponseFromAI(imagePayload,targetWord):
     try:
         client = OpenAI(api_key=API_KEY)
     except Exception as e:

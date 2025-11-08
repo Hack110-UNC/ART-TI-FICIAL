@@ -4,14 +4,15 @@ import pygame_gui
 import random
 import time 
 import processing as imageProcessing
+import parsing
 USEAPI=True
 
-SCREEN_WIDTH: int = 1000
-SCREEN_HEIGHT: int = 600
+SCREEN_WIDTH: int = 500
+SCREEN_HEIGHT: int = 300
 TICK_RATE: int = 60
 BLACK = (0,0,0)
 WHITE = (255,255,255)
-
+brushSize = 2
 score = 0
 
 #TEMPORARAY
@@ -29,8 +30,6 @@ def main():
     screen.fill(WHITE)
 
     #GUI Display
-    manager = pygame_gui.UIManager(screen, "styles.json")
-    score_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20,20), (100,50)), text=f"Score: {score}", manager=manager, object_id="fonts")
     #drawing period over
 
     pos_list = []
@@ -50,8 +49,6 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
-            manager.process_events(event) #For GUI Manager
-        manager.update(time_delta) #For GUI Manager
         if drawing:
             if pygame.mouse.get_pressed()[0]: 
                 mouse_pos = pygame.mouse.get_pos()
@@ -59,11 +56,15 @@ def main():
                     pos_list.append(mouse_pos)
                 last_pos = pos_list[len(pos_list)-1]
                 second_last_pos = pos_list[len(pos_list)-2]
-                pygame.draw.circle(surface=screen, color=BLACK, center=mouse_pos, radius=12)
-                pygame.draw.lines(surface=screen, color=BLACK, closed=True, width=30, points=(second_last_pos, last_pos))
+                pygame.draw.circle(surface=screen, 
+                                   color=BLACK, center=mouse_pos, 
+                                   radius=int(brushSize))
+                pygame.draw.lines(surface=screen, 
+                                  color=BLACK, closed=True, 
+                                  width=int(brushSize*2.5), 
+                                  points=(second_last_pos, last_pos))
             elif pygame.mouse.get_pressed()[0] == False:
                 pos_list = []
-        manager.draw_ui(screen) #For GUI Manager
         pygame.display.flip()
         # clock.tick(TICK_RATE) Moved: Kept in case of broken function
         endTime = time.time()
@@ -75,8 +76,9 @@ def main():
                 surface_array=surface_array/16777215 #b&w
                 path=imageProcessing.imgData2Png(surface_array)
                 base64String=imageProcessing.filePath2AIPayload(path)
-                AIresponse=imageProcessing.getResposeFromAI(base64String,targetWord)
-                print(AIresponse)
+                AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
+                AItext = parsing.getRawOutputText(AIresponse)
+                objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
                 imageSent=True
             elif USEAPI==False:
                 print("API use is disabled currently.")
