@@ -1,1 +1,4 @@
-__gitignore__
+.gitignore
+testing/
+pycache/
+__pycache__
