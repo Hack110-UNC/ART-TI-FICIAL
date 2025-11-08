@@ -54,7 +54,7 @@ def main():
         label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
         label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
         label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-
+        label_text(f"Draw: {targetWord}", text_font, (0,0,0),375,570)
         if drawing and not timerActive:
             startTime = time.time()
             timerActive=True 
