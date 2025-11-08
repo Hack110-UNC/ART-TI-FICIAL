@@ -3,9 +3,10 @@ import pygame
 import pygame_gui
 import random
 import time 
+import os
 import processing as imageProcessing
 import parsing
-USEAPI=True
+USEAPI=False
 
 SCREEN_WIDTH: int = 500
 SCREEN_HEIGHT: int = 300
@@ -14,14 +15,15 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 brushSize = 2
 score = 0
-
-#TEMPORARAY
-targetWord='tree'
+nounsPath = os.path.join(os.getcwd(),"assets","nouns.csv") #to ensure it works on all operating systems
+drawingNouns=parsing.csvNounsToList(nounsPath)
 def main():
     drawing=True
     timerActive=False
     imageSent=False
     finishEarly=False
+    index=random.randint(0,len(drawingNouns)-1)
+    targetWord=drawingNouns[index]
     pygame.init()
     pygame.font.init()
 
