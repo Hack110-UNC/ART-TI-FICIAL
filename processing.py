@@ -2,18 +2,23 @@ import numpy as np
 from PIL import Image
 import base64
 from openai import OpenAI
-def imgData2Png(imageArray): #image array of type [[0,0,1],[1,0,0],[1,0,1]] etc.
-    matrix = np.array(imageArray) * 255 #convert to np
-    #and scale to RGB coloring
+import os
+def imgData2Png(imageArray): #numpy image array
+    matrix = np.array(imageArray).astype('uint8') * 255 #scale to RGB
     img = Image.fromarray(matrix, mode='L')
-    return img
+    directory=os.getcwd()
+    filename=f"temp.jpg"
+    path=os.path.join(directory,filename)
+    img.save(path)
+    return path
 
 def filePath2AIPayload(filePath):
     with open(filePath, "rb") as image:
         base64BytesRaw=base64.b64encode(
             image.read())
         base64ImgString = base64BytesRaw.decode("utf-8")
-        return base64ImgString #send to AI
+    os.remove(filePath)
+    return base64ImgString #send to AI
 
 def getResposeFromAI(imagePayload,targetWord):
     #PLESAE DO NOT LEAVE THE API KEY HERE
