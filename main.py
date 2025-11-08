@@ -32,10 +32,9 @@ def label_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
 
-
-targetWord='tree'
 nounsPath = os.path.join(os.getcwd(),"assets","nouns.csv") #to ensure it works on all operating systems
 drawingNouns=parsing.csvNounsToList(nounsPath)
+
 def main():
     drawing=True
     timerActive=False
@@ -43,6 +42,7 @@ def main():
     finishEarly=False
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
+    sec=0
 
     pos_list = []
     clock = pygame.time.Clock()
@@ -87,10 +87,11 @@ def main():
         if (endTime-startTime >= 30) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
-            surface_array = pygame.surfarray.pixels2d(surface=screen)
             if (not imageSent) and USEAPI==True:
+                surface_array = pygame.surfarray.pixels2d(surface=screen)
                 surface_array=surface_array/16777215 #b&w
                 path=imageProcessing.imgData2Png(surface_array)
+                del surface_array
                 base64String=imageProcessing.filePath2AIPayload(path)
                 AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                 AItext = parsing.getRawOutputText(AIresponse)
