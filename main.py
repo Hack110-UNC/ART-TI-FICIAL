@@ -89,15 +89,14 @@ def main():
         elif menu_state == "game":
             if imageSent==True:
                 targetWord,difficulty=getNewWord(drawingNouns)
-                round+=1
                 drawing=True
                 timerActive=False
                 imageSent=False
             #Labels Display Setup
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-            label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
+            label_text(f"Round: {round}/3", text_font, (0,0,0), 835, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
+            label_text(f"Draw: {targetWord}", text_font, (0,0,0),375,570)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
@@ -144,6 +143,9 @@ def main():
                     time.sleep(6)
                     clearAll(screen)
                     pygame.display.flip()
+                    round+=1
+                    if round>3:
+                        menu_state="done"
                     imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
@@ -151,4 +153,9 @@ def main():
             else:
                 if elasped<30:
                     sec=int(roundTime-elasped)
+        elif menu_state=="done":
+            clearAll(screen)
+            label_text(f"Your final score: {score}", text_font, (0,0,0), 250, 400)
+            pygame.display.flip()
+
 main()
