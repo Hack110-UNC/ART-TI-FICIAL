@@ -20,7 +20,6 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 brushSize = 2
 score = 0
-round = 0
 sec = 0
 
 bg_img = pygame.image.load("Drawin.jpg")
@@ -52,14 +51,14 @@ def main():
     imageSent=False
     finishEarly=False
     roundTime=30
-    targetWord,difficulty=getNewWord(drawingNouns)
+    round = 1
+    targetWord,difficulty=getNewWord(drawingNouns,round)
     sec=roundTime
     pen_color = BLACK
     eraser_size = 1
     num = 0
     score = 0
     pos_list = []
-    round = 1
     clock = pygame.time.Clock()
     running = True
     menu_state = "main"
@@ -88,7 +87,7 @@ def main():
             clearAll(screen)
         elif menu_state == "game":
             if imageSent==True:
-                targetWord,difficulty=getNewWord(drawingNouns)
+                targetWord,difficulty=getNewWord(drawingNouns,round)
                 drawing=True
                 timerActive=False
                 imageSent=False
@@ -96,7 +95,7 @@ def main():
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
             label_text(f"Round: {round}/3", text_font, (0,0,0), 835, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-            label_text(f"Draw: {targetWord}", text_font, (0,0,0),375,570)
+            label_text(f"Draw: {targetWord}({difficulty})", text_font, (0,0,0),300,570)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
@@ -114,7 +113,6 @@ def main():
                                     color=pen_color, closed=True, 
                                     width=int(brushSize*2.5*eraser_size), 
                                     points=(second_last_pos, last_pos))
-                    
                 elif pygame.mouse.get_pressed()[0] == False:
                     pos_list = []
             pygame.display.flip()
@@ -155,7 +153,7 @@ def main():
                     sec=int(roundTime-elasped)
         elif menu_state=="done":
             clearAll(screen)
-            label_text(f"Your final score: {score}", text_font, (0,0,0), 250, 400)
+            label_text(f"Your final score: {score}", text_font, (0,0,0), 250, 300)
             pygame.display.flip()
 
 main()
