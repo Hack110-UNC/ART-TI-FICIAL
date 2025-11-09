@@ -33,8 +33,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.fill(WHITE)
 
 #Converting Text to Label
-text_font = pygame.font.SysFont("verdana", 25, bold=True)
-title_font = pygame.font.SysFont("Comic Sans MS", 70, bold=False)
+text_font = pygame.font.SysFont("Comic Sans MS", 25, bold=True)
+title_font = pygame.font.SysFont("Comic Sans MS", 60, bold=True)
 def label_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
@@ -74,7 +74,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
-                if event.key == pygame.K_o:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_RETURN:
                     menu_state = "game"
                 if event.key == pygame.K_e:
                     num += 1
@@ -84,11 +84,14 @@ def main():
                     else:
                         pen_color = BLACK
                         eraser_size = 1
+        #Main Menu Setup
         if menu_state == "main": 
             screen.blit(bg_img)
-            label_text(f"ART-ti-ficial", title_font, (0,0,0), 380, 100)
+            label_text(f"ART-ti-ficial", title_font, (0,0,0), 250, 40)
+            label_text(f"press enter to begin", text_font, (0,0,0), 310, 450)
             pygame.display.flip()
             clearAll(screen)
+        #Game Meny Setup
         elif menu_state == "game":
             if imageSent==True:
                 targetWord,difficulty=getNewWord(drawingNouns)
@@ -100,7 +103,7 @@ def main():
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
             label_text(f"Round: {round}", text_font, (0,0,0), 750, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 380, 10)
-            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,570)
+            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,550)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
