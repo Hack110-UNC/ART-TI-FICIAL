@@ -23,6 +23,9 @@ score = 0
 round = 0
 sec = 0
 
+menu_state = "main"
+bg_img = pygame.image.load("Drawin.jpg")
+
 pygame.init()
 pygame.font.init()
 
