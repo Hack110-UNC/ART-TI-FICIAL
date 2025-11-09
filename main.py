@@ -99,7 +99,7 @@ def main():
                 imageSent=False
             #Labels Display Setup
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-            label_text(f"Round: {round}", text_font, (0,0,0), 750, 10)
+            label_text(f"Round: {round}/3", text_font, (0,0,0), 750, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 380, 10)
             label_text("E to Erase", text_font, (0,0,0), 750, 550)
             label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,550)
