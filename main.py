@@ -41,7 +41,7 @@ easyNounsPath = os.path.join(os.getcwd(),"assets","easynouns.csv") #to ensure it
 easyNouns=parsing.csvNounsToList(easyNounsPath)
 medNounsPath = os.path.join(os.getcwd(),"assets","mednouns.csv") #to ensure it works on all operating systems
 medNouns=parsing.csvNounsToList(medNounsPath)
-hardNounsPath = os.path.join(os.getcwd(),"assets","mednouns.csv") #to ensure it works on all operating systems
+hardNounsPath = os.path.join(os.getcwd(),"assets","hardnouns.csv") #to ensure it works on all operating systems
 hardNouns=parsing.csvNounsToList(hardNounsPath)
 drawingNouns=[easyNouns,medNouns,hardNouns]
 def main():
@@ -69,8 +69,6 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
-                    finishEarly=True
                 if event.key == pygame.K_o:
                     menu_state = "game"
                 if event.key == pygame.K_e:
@@ -129,6 +127,9 @@ def main():
                     surface_array=surface_array/16777215 #b&w
                     path=imageProcessing.imgData2Png(surface_array[0:999,61:938])
                     del surface_array
+                    clearTopSection(screen)
+                    label_text("Processing...", text_font, (0,0,0), 400, 10)
+                    pygame.display.flip()
                     base64String=imageProcessing.filePath2AIPayload(path)
                     AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                     AItext = parsing.getRawOutputText(AIresponse)
