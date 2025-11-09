@@ -23,7 +23,6 @@ score = 0
 round = 0
 sec = 0
 
-menu_state = "main"
 bg_img = pygame.image.load("Drawin.jpg")
 
 pygame.init()
@@ -63,6 +62,7 @@ def main():
     round = 1
     clock = pygame.time.Clock()
     running = True
+    menu_state = "main"
 
     while running: 
         #Tracks whether an event happens
@@ -72,7 +72,8 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
-            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_o:
+                    menu_state = "game"
                 if event.key == pygame.K_e:
                     num += 1
                     if num % 2 == 1:
@@ -84,12 +85,19 @@ def main():
         if menu_state == "main": 
             screen.blit(bg_img)
             pygame.display.flip()
+            clearAll(screen)
         elif menu_state == "game":
+            if imageSent==True:
+                targetWord,difficulty=getNewWord(drawingNouns)
+                round+=1
+                drawing=True
+                timerActive=False
+                imageSent=False
             #Labels Display Setup
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
             label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-            label_text(f"Draw: {targetWord}", text_font, (0,0,0),375,570)
+            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
@@ -122,7 +130,7 @@ def main():
                 if (not imageSent) and USEAPI==True:
                     surface_array = pygame.surfarray.pixels2d(surface=screen)
                     surface_array=surface_array/16777215 #b&w
-                    path=imageProcessing.imgData2Png(surface_array)
+                    path=imageProcessing.imgData2Png(surface_array[0:999,61:938])
                     del surface_array
                     base64String=imageProcessing.filePath2AIPayload(path)
                     AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
@@ -134,75 +142,13 @@ def main():
                     pygame.display.flip()
                     score=score+AIscore
                     time.sleep(6)
-                    clearTopSection(screen)
+                    clearAll(screen)
+                    pygame.display.flip()
                     imageSent=True
-                elif USEAPI==False and not imageSent:
-                    print("API use is disabled currently.")
-                    imageSent=True
-            else:
-                if elasped<30:
-                    sec=int(roundTime-elasped)
-        if imageSent==True:
-            targetWord,difficulty=getNewWord(drawingNouns)
-            round+=1
-            drawing=True
-            timerActive=False
-            imageSent=False
-        #Labels Display Setup
-        label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-        label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
-        label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-        label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
-        if drawing and not timerActive:
-            startTime = time.time()
-            timerActive=True                 
-        if drawing:
-            if pygame.mouse.get_pressed()[0]: 
-                mouse_pos = pygame.mouse.get_pos()
-                if mouse_pos not in pos_list:
-                    pos_list.append(mouse_pos)
-                last_pos = pos_list[len(pos_list)-1]
-                second_last_pos = pos_list[len(pos_list)-2]
-                pygame.draw.circle(surface=screen, 
-                                   color=pen_color, center=mouse_pos, 
-                                   radius=int(brushSize*eraser_size))
-                pygame.draw.lines(surface=screen, 
-                                  color=pen_color, closed=True, 
-                                  width=int(brushSize*2.5*eraser_size), 
-                                  points=(second_last_pos, last_pos))
-            elif pygame.mouse.get_pressed()[0] == False:
-                pos_list = []
-        pygame.display.flip()
-        clock.tick(TICK_RATE)
-        endTime = time.time()
-        elasped=endTime-startTime
-        clearTopSection(screen)
-        if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
-            drawing=False
-            timerActive=False
-            if (not imageSent) and USEAPI==True:
-                surface_array = pygame.surfarray.pixels2d(surface=screen)
-                surface_array=surface_array/16777215 #b&w
-                path=imageProcessing.imgData2Png(surface_array[0:999,61:938])
-                del surface_array
-                base64String=imageProcessing.filePath2AIPayload(path)
-                AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
-                AItext = parsing.getRawOutputText(AIresponse)
-                objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
-                print("API called successfully")
-                clearTopSection(screen)
-                label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 200, 10)
-                pygame.display.flip()
-                score=score+AIscore
-                time.sleep(6)
-                clearAll(screen)
-                pygame.display.flip()
-                imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
                 imageSent=True
-        else:
-            if elasped<30:
-                sec=int(roundTime-elasped)
-
+            else:
+                if elasped<30:
+                    sec=int(roundTime-elasped)
 main()
