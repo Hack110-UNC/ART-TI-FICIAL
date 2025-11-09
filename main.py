@@ -43,6 +43,9 @@ def main():
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
     sec=roundTime
+    pen_color = BLACK
+    eraser_size = 1
+    num = 0
     score = 0
     pos_list = []
     clock = pygame.time.Clock()
@@ -67,7 +70,13 @@ def main():
                     finishEarly=True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
-                    enable_eraser()
+                    num += 1
+                    if num % 2 == 1:
+                        pen_color = WHITE
+                        eraser_size = 3
+                    else:
+                        pen_color = BLACK
+                        eraser_size = 1
         if drawing:
             if pygame.mouse.get_pressed()[0]: 
                 mouse_pos = pygame.mouse.get_pos()
@@ -76,11 +85,11 @@ def main():
                 last_pos = pos_list[len(pos_list)-1]
                 second_last_pos = pos_list[len(pos_list)-2]
                 pygame.draw.circle(surface=screen, 
-                                   color=BLACK, center=mouse_pos, 
-                                   radius=int(brushSize))
+                                   color=pen_color, center=mouse_pos, 
+                                   radius=int(brushSize*eraser_size))
                 pygame.draw.lines(surface=screen, 
-                                  color=BLACK, closed=True, 
-                                  width=int(brushSize*2.5), 
+                                  color=pen_color, closed=True, 
+                                  width=int(brushSize*2.5*eraser_size), 
                                   points=(second_last_pos, last_pos))
                 
             elif pygame.mouse.get_pressed()[0] == False:
