@@ -52,7 +52,7 @@ def main():
     timerActive=False
     imageSent=False
     finishEarly=False
-    roundTime=30
+    roundTime=20
     round = 1
     targetWord,difficulty=getNewWord(drawingNouns,round)
     sec=roundTime
@@ -73,6 +73,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_RETURN:
                     menu_state = "game"
+                    clearAll(screen)
                 if event.key == pygame.K_e:
                     num += 1
                     if num % 2 == 1:
@@ -155,7 +156,7 @@ def main():
                     clearAll(screen)
                     pygame.display.flip()
                     round+=1
-                    roundTime+=30
+                    roundTime+=20
                     if round>3:
                         menu_state="done"
                     imageSent=True
