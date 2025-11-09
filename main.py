@@ -7,7 +7,7 @@ import os
 import processing as imageProcessing
 import parsing
 from drawing import * 
-USEAPI=False
+USEAPI=True
 
 SCREEN_WIDTH: int = 1000
 SCREEN_HEIGHT: int = 600
@@ -39,7 +39,7 @@ def main():
     timerActive=False
     imageSent=False
     finishEarly=False
-    roundTime=15
+    roundTime=30
     index=random.randint(0,len(drawingNouns)-1)
     targetWord=drawingNouns[index]
     sec=roundTime
@@ -112,10 +112,13 @@ def main():
                 AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                 AItext = parsing.getRawOutputText(AIresponse)
                 objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
+                print("API called successfully")
                 clearTopSection(screen)
-                label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 400, 10)
+                label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 200, 10)
+                pygame.display.flip()
                 score=score+AIscore
-                time.sleep(4)
+                time.sleep(10)
+                clearTopSection(screen)
                 imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
