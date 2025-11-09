@@ -65,6 +65,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     finishEarly=True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    enable_eraser()
         if drawing:
             if pygame.mouse.get_pressed()[0]: 
                 mouse_pos = pygame.mouse.get_pos()
@@ -79,6 +82,7 @@ def main():
                                   color=BLACK, closed=True, 
                                   width=int(brushSize*2.5), 
                                   points=(second_last_pos, last_pos))
+                
             elif pygame.mouse.get_pressed()[0] == False:
                 pos_list = []
         pygame.display.flip()
