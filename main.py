@@ -20,7 +20,6 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 brushSize = 2
 score = 0
-round = 0
 sec = 0
 
 bg_img = pygame.image.load("Drawin.jpg")
@@ -54,14 +53,14 @@ def main():
     imageSent=False
     finishEarly=False
     roundTime=30
-    targetWord,difficulty=getNewWord(drawingNouns)
+    round = 1
+    targetWord,difficulty=getNewWord(drawingNouns,round)
     sec=roundTime
     pen_color = BLACK
     eraser_size = 1
     num = 0
     score = 0
     pos_list = []
-    round = 1
     clock = pygame.time.Clock()
     running = True
     menu_state = "main"
@@ -96,8 +95,7 @@ def main():
         #Game Meny Setup
         elif menu_state == "game":
             if imageSent==True:
-                targetWord,difficulty=getNewWord(drawingNouns)
-                round+=1
+                targetWord,difficulty=getNewWord(drawingNouns,round)
                 drawing=True
                 timerActive=False
                 imageSent=False
@@ -123,7 +121,6 @@ def main():
                                     color=pen_color, closed=True, 
                                     width=int(brushSize*2.5*eraser_size), 
                                     points=(second_last_pos, last_pos))
-                    
                 elif pygame.mouse.get_pressed()[0] == False:
                     pos_list = []
             pygame.display.flip()
@@ -152,11 +149,20 @@ def main():
                     time.sleep(6)
                     clearAll(screen)
                     pygame.display.flip()
+                    round+=1
+                    roundTime+=30
+                    if round>3:
+                        menu_state="done"
                     imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")
                 imageSent=True
             else:
-                if elasped<30:
+                if elasped<roundTime:
                     sec=int(roundTime-elasped)
+        elif menu_state=="done":
+            clearAll(screen)
+            label_text(f"Your final score: {score}", text_font, (0,0,0), 250, 300)
+            pygame.display.flip()
+
 main()
