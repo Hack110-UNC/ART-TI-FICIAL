@@ -13,7 +13,7 @@ except Exception as e:
     exit()
 USEAPI=True
 
-SCREEN_WIDTH: int = 1000
+SCREEN_WIDTH: int = 900
 SCREEN_HEIGHT: int = 600
 TICK_RATE: int = 60
 BLACK = (0,0,0)
@@ -34,6 +34,7 @@ screen.fill(WHITE)
 
 #Converting Text to Label
 text_font = pygame.font.SysFont("verdana", 25, bold=True)
+title_font = pygame.font.SysFont("Comic Sans MS", 70, bold=False)
 def label_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
@@ -45,6 +46,7 @@ medNouns=parsing.csvNounsToList(medNounsPath)
 hardNounsPath = os.path.join(os.getcwd(),"assets","mednouns.csv") #to ensure it works on all operating systems
 hardNouns=parsing.csvNounsToList(hardNounsPath)
 drawingNouns=[easyNouns,medNouns,hardNouns]
+
 def main():
     #INITALIZATIONS
     drawing=True
@@ -84,6 +86,7 @@ def main():
                         eraser_size = 1
         if menu_state == "main": 
             screen.blit(bg_img)
+            label_text(f"ART-ti-ficial", title_font, (0,0,0), 380, 100)
             pygame.display.flip()
             clearAll(screen)
         elif menu_state == "game":
@@ -95,9 +98,9 @@ def main():
                 imageSent=False
             #Labels Display Setup
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-            label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
-            label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
+            label_text(f"Round: {round}", text_font, (0,0,0), 750, 10)
+            label_text(f"Timer: {sec}", text_font, (0,0,0), 380, 10)
+            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,570)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
