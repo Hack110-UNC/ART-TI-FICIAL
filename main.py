@@ -65,20 +65,6 @@ def main():
     running = True
 
     while running: 
-        if imageSent==True:
-            targetWord,difficulty=getNewWord(drawingNouns)
-            round+=1
-            drawing=True
-            timerActive=False
-            imageSent=False
-        #Labels Display Setup
-        label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-        label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
-        label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-        label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
-        if drawing and not timerActive:
-            startTime = time.time()
-            timerActive=True 
         #Tracks whether an event happens
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -156,6 +142,20 @@ def main():
             else:
                 if elasped<30:
                     sec=int(roundTime-elasped)
+        if imageSent==True:
+            targetWord,difficulty=getNewWord(drawingNouns)
+            round+=1
+            drawing=True
+            timerActive=False
+            imageSent=False
+        #Labels Display Setup
+        label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
+        label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
+        label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
+        label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),375,570)
+        if drawing and not timerActive:
+            startTime = time.time()
+            timerActive=True                 
         if drawing:
             if pygame.mouse.get_pressed()[0]: 
                 mouse_pos = pygame.mouse.get_pos()
@@ -183,7 +183,7 @@ def main():
             if (not imageSent) and USEAPI==True:
                 surface_array = pygame.surfarray.pixels2d(surface=screen)
                 surface_array=surface_array/16777215 #b&w
-                path=imageProcessing.imgData2Png(surface_array)
+                path=imageProcessing.imgData2Png(surface_array[0:999,61:938])
                 del surface_array
                 base64String=imageProcessing.filePath2AIPayload(path)
                 AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
