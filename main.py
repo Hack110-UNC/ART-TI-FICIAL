@@ -13,7 +13,7 @@ except Exception as e:
     exit()
 USEAPI=True
 
-SCREEN_WIDTH: int = 1000
+SCREEN_WIDTH: int = 900
 SCREEN_HEIGHT: int = 600
 TICK_RATE: int = 60
 BLACK = (0,0,0)
@@ -32,7 +32,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.fill(WHITE)
 
 #Converting Text to Label
-text_font = pygame.font.SysFont("verdana", 25, bold=True)
+text_font = pygame.font.SysFont("Comic Sans MS", 25, bold=True)
+title_font = pygame.font.SysFont("Comic Sans MS", 60, bold=True)
 def label_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
@@ -44,6 +45,7 @@ medNouns=parsing.csvNounsToList(medNounsPath)
 hardNounsPath = os.path.join(os.getcwd(),"assets","hardnouns.csv") #to ensure it works on all operating systems
 hardNouns=parsing.csvNounsToList(hardNounsPath)
 drawingNouns=[easyNouns,medNouns,hardNouns]
+
 def main():
     #INITALIZATIONS
     drawing=True
@@ -69,7 +71,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_o:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_RETURN:
                     menu_state = "game"
                 if event.key == pygame.K_e:
                     num += 1
@@ -79,10 +81,16 @@ def main():
                     else:
                         pen_color = BLACK
                         eraser_size = 1
+        #Main Menu Setup
         if menu_state == "main": 
             screen.blit(bg_img)
+            label_text(f"ART-ti-ficial", title_font, (0,0,0), 250, 40)
+            pygame.draw.rect(surface=screen, color=BLACK, rect=((298,444), (310,60)), border_radius=10)
+            pygame.draw.rect(surface=screen, color=WHITE, rect=((300,446), (300,50)), border_radius=10)
+            label_text(f"press enter to begin", text_font, (0,0,0), 330, 450)
             pygame.display.flip()
             clearAll(screen)
+        #Game Meny Setup
         elif menu_state == "game":
             if imageSent==True:
                 targetWord,difficulty=getNewWord(drawingNouns,round)
@@ -91,9 +99,9 @@ def main():
                 imageSent=False
             #Labels Display Setup
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
-            label_text(f"Round: {round}/3", text_font, (0,0,0), 835, 10)
-            label_text(f"Timer: {sec}", text_font, (0,0,0), 425, 10)
-            label_text(f"Draw: {targetWord}({difficulty})", text_font, (0,0,0),300,570)
+            label_text(f"Round: {round}", text_font, (0,0,0), 750, 10)
+            label_text(f"Timer: {sec}", text_font, (0,0,0), 380, 10)
+            label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,550)
             if drawing and not timerActive:
                 startTime = time.time()
                 timerActive=True
