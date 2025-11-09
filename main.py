@@ -88,7 +88,9 @@ def main():
         if menu_state == "main": 
             screen.blit(bg_img)
             label_text(f"ART-ti-ficial", title_font, (0,0,0), 250, 40)
-            label_text(f"press enter to begin", text_font, (0,0,0), 310, 450)
+            pygame.draw.rect(surface=screen, color=BLACK, rect=((298,444), (310,60)), border_radius=10)
+            pygame.draw.rect(surface=screen, color=WHITE, rect=((300,446), (300,50)), border_radius=10)
+            label_text(f"press enter to begin", text_font, (0,0,0), 330, 450)
             pygame.display.flip()
             clearAll(screen)
         #Game Meny Setup
