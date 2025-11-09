@@ -37,7 +37,7 @@ def getResponseFromAI(imagePayload,targetWord):
     {"role": "user",
      "content":[
         { "type": "input_text", 
-         "text": f"What objects or shapes do you see in this image? Give a word or phrase to describe it, being as specific as possible without making up details. Please keep in mind you are not supposed to know what the drawing is at this point. Next, score how close that phrase is to the {targetWord} on a 0–5000 scale, thinking in terms of semantic association. Answer with a positive integer but don't round it. Answer only like this: [phrase, score]"
+         "text": f"What objects or shapes do you see in this image? Give a word or phrase to describe it, being as specific as possible without making up details. Ignore all text on screen. Please keep in mind you are not supposed to know what the drawing is at this point. Next, score how close that phrase is to the {targetWord} on a 0–5000 scale, thinking in terms of semantic association. Answer with a positive integer but don't round it. Answer only like this: [phrase, score]"
          },
          { "type": "input_image",
           "image_url": f"data:image/jpeg;base64,{imagePayload}"   

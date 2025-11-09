@@ -101,6 +101,7 @@ def main():
             label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
             label_text(f"Round: {round}", text_font, (0,0,0), 750, 10)
             label_text(f"Timer: {sec}", text_font, (0,0,0), 380, 10)
+            label_text("E to Erase", text_font, (0,0,0), 750, 550)
             label_text(f"Draw: {targetWord} ({difficulty})", text_font, (0,0,0),320,550)
             if drawing and not timerActive:
                 startTime = time.time()
@@ -126,25 +127,28 @@ def main():
             endTime = time.time()
             elasped=endTime-startTime
             clearTopSection(screen)
+            clearBottomSection(screen)
             if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
                 drawing=False
                 timerActive=False
                 time.sleep(2)
                 if (not imageSent) and USEAPI==True:
-                    surface_array = pygame.surfarray.pixels2d(surface=screen)
-                    surface_array=surface_array/16777215 #b&w
-                    path=imageProcessing.imgData2Png(surface_array[0:999,61:938])
-                    del surface_array
                     clearTopSection(screen)
                     label_text("Processing...", text_font, (0,0,0), 400, 10)
+                    clearBottomSection(screen)
                     pygame.display.flip()
+                    surface_array = pygame.surfarray.pixels2d(surface=screen)
+                    surface_array=surface_array/16777215 #b&w
+                    path=imageProcessing.imgData2Png(surface_array)
+                    del surface_array
                     base64String=imageProcessing.filePath2AIPayload(path)
                     AIresponse=imageProcessing.getResponseFromAI(base64String,targetWord)
                     AItext = parsing.getRawOutputText(AIresponse)
                     objectAccordingToAI,AIscore=parsing.parseRawText(AItext)
                     print("API called successfully")
                     clearTopSection(screen)
-                    label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 200, 10)
+                    result=f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000"
+                    label_text(result, text_font, (0,0,0), 220-len(result), 10)
                     pygame.display.flip()
                     score=score+AIscore
                     time.sleep(6)
@@ -163,7 +167,9 @@ def main():
                     sec=int(roundTime-elasped)
         elif menu_state=="done":
             clearAll(screen)
-            label_text(f"Your final score: {score}", text_font, (0,0,0), 250, 300)
+            label_text(f"Your final score: {score}", text_font, (0,0,0), 325, 325)
+            label_text("Press enter to play again", text_font, (0,0,0), 325, 225)
+            round=1
             pygame.display.flip()
 
 main()
