@@ -1,5 +1,14 @@
 import random
-def getNewWord(wordList):
+def getNewWord(wordListOfLists):
+    level=random.randint(0,2)
+    match level:
+        case 0:
+            difficulty="easy"
+        case 1:
+            difficulty="medium"
+        case 2:
+            difficulty="hard"    
+    wordList=wordListOfLists[level]
     index=random.randint(0,len(wordList)-1)
     newWord=wordList[index]
-    return newWord
+    return newWord, difficulty
