@@ -142,6 +142,7 @@ def main():
                     clearAll(screen)
                     pygame.display.flip()
                     round+=1
+                    roundTime+=30
                     if round>3:
                         menu_state="done"
                     imageSent=True
@@ -149,7 +150,7 @@ def main():
                 print("API use is disabled currently.")
                 imageSent=True
             else:
-                if elasped<30:
+                if elasped<roundTime:
                     sec=int(roundTime-elasped)
         elif menu_state=="done":
             clearAll(screen)
