@@ -71,7 +71,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_RETURN:
+                if event.key == pygame.K_RETURN: 
                     menu_state = "game"
                     clearAll(screen)
                 if event.key == pygame.K_e:
