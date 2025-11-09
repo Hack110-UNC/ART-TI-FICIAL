@@ -117,7 +117,7 @@ def main():
                 label_text(f"You drew: {objectAccordingToAI}. Score: {AIscore}/5000", text_font, (0,0,0), 200, 10)
                 pygame.display.flip()
                 score=score+AIscore
-                time.sleep(10)
+                time.sleep(6)
                 clearTopSection(screen)
                 imageSent=True
             elif USEAPI==False and not imageSent:
