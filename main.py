@@ -1,12 +1,16 @@
-import numpy
-import pygame
-import pygame_gui
-import random
-import time 
-import os
-import processing as imageProcessing
-import parsing
-from drawing import * 
+try:
+    import pygame
+    import pygame_gui
+    import random
+    import time 
+    import os
+    import processing as imageProcessing
+    import parsing
+    from drawing import * 
+    from utils import *
+except Exception as e:
+    print(f"Error importing modules, exiting now: {e}")
+    exit()
 USEAPI=True
 
 SCREEN_WIDTH: int = 1000
@@ -35,24 +39,30 @@ nounsPath = os.path.join(os.getcwd(),"assets","nouns.csv") #to ensure it works o
 drawingNouns=parsing.csvNounsToList(nounsPath)
 
 def main():
+    #INITALIZATIONS
     drawing=True
     timerActive=False
     imageSent=False
     finishEarly=False
     roundTime=30
-    index=random.randint(0,len(drawingNouns)-1)
-    targetWord=drawingNouns[index]
+    targetWord=getNewWord(drawingNouns)
     sec=roundTime
     pen_color = BLACK
     eraser_size = 1
     num = 0
     score = 0
     pos_list = []
+    round = 1
     clock = pygame.time.Clock()
     running = True
 
-
     while running: 
+        if imageSent==True:
+            targetWord=getNewWord(drawingNouns)
+            round+=1
+            drawing=True
+            timerActive=False
+            imageSent=False
         #Labels Display Setup
         label_text(f"Score: {score}", text_font, (0,0,0), 10, 10)
         label_text(f"Round: {round}", text_font, (0,0,0), 835, 10)
@@ -91,7 +101,6 @@ def main():
                                   color=pen_color, closed=True, 
                                   width=int(brushSize*2.5*eraser_size), 
                                   points=(second_last_pos, last_pos))
-                
             elif pygame.mouse.get_pressed()[0] == False:
                 pos_list = []
         pygame.display.flip()
@@ -102,7 +111,6 @@ def main():
         if (elasped >= roundTime) or (finishEarly and not imageSent): #30 sec draw time, period over
             drawing=False
             timerActive=False
-            time.sleep(2)
             if (not imageSent) and USEAPI==True:
                 surface_array = pygame.surfarray.pixels2d(surface=screen)
                 surface_array=surface_array/16777215 #b&w
@@ -118,7 +126,8 @@ def main():
                 pygame.display.flip()
                 score=score+AIscore
                 time.sleep(6)
-                clearTopSection(screen)
+                clearAll(screen)
+                pygame.display.flip()
                 imageSent=True
             elif USEAPI==False and not imageSent:
                 print("API use is disabled currently.")

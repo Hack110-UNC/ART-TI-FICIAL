@@ -9,8 +9,16 @@ def parseRawText(string): #must be of form "[OBJECT,SCORE]"
     string = string.removeprefix("[")
     string = string.removesuffix("]")
     values = string.partition(",")
-    score = int(values[2])
     objectAI = values[0]
+    try:
+        score = int(values[2])
+    except:
+        listOfDigits=[]
+        for char in string:
+            if char.isdigit():
+                listOfDigits.append(char)
+        numStr="".join(listOfDigits)
+        score=int(numStr)
     return objectAI, score
 def csvNounsToList(filePath):
     list=[]
