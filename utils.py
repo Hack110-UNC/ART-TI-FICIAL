@@ -1,6 +1,6 @@
 import random
-def getNewWord(wordListOfLists):
-    level=random.randint(0,2)
+def getNewWord(wordListOfLists,round):
+    level=round-1
     match level:
         case 0:
             difficulty="easy"
